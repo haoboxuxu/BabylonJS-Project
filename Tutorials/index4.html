@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BabylonJS Demo3: Material</title>
+    <script src="./babylonjs/babylon.max.js"></script>
+    <style>
+        #canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        window.addEventListener("DOMContentLoaded", function() {
+            var canvas = document.getElementById("canvas");
+            var engine = new BABYLON.Engine(canvas, true);
+
+            var createScene = function() {
+                var scene = new BABYLON.Scene(engine);
+                scene.clearColor = new BABYLON.Color3.White();
+
+                var box = BABYLON.Mesh.CreateBox("Box", 4.0, scene);
+
+                var camera = new BABYLON.ArcRotateCamera('arccamera', 
+                                                        BABYLON.Tools.ToRadians(45), 
+                                                        BABYLON.Tools.ToRadians(45),
+                                                        10.0,
+                                                        box.position,
+                                                        scene);
+
+                camera.attachControl(canvas, true);
+
+                var pointLight = new BABYLON.PointLight("pointlight", new BABYLON.Vector3(0, 10, 0), scene);
+                pointLight.parent = camera;
+                pointLight.diffuse = new BABYLON.Color3(1, 1, 1);
+
+                var material = new BABYLON.StandardMaterial("material1", scene);
+                // material.diffuseColor = new BABYLON.Color3.Blue();
+                // material.emissiveColor = BABYLON.Color3.Red();
+                // material.specularColor = BABYLON.Color3.Red();
+                // material.alpha = 0.5;
+
+                material.diffuseTexture = new BABYLON.Texture("imgs/minecraft.jpg", scene); //Allow CORS, use Live-Server plugin in vscode
+                // https://cpetry.github.io/NormalMap-Online/
+                material.bumpTexture = new BABYLON.Texture("imgs/minecraft_normal.png", scene);
+                material.roughness = 0.5;
+                box.material = material;
+
+                return scene;
+            };
+            
+            var scene = createScene();
+
+            engine.runRenderLoop(function() {
+                // var material = scene.getMeshByName("Box").material;
+                // material.alpha -= 0.01;
+                // if (material.alpha <= 0) material.alpha = 1;
+                scene.render();
+            });
+
+        });
+    </script>
+</body>
+</html>
