@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- https://github.com/BabylonJS/BlenderExporter -->
+    <title>BabylonJS Demo3: 3DModel</title>
+    <script src="./babylonjs/babylon.max.js"></script>
+    <style>
+        #canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        window.addEventListener("DOMContentLoaded", function() {
+            var canvas = document.getElementById("canvas");
+            var engine = new BABYLON.Engine(canvas, true);
+
+            var createScene = function() {
+                var scene = new BABYLON.Scene(engine);
+                engine.enableOfflineSupport = false;
+                scene.clearColor = new BABYLON.Color3.White();
+
+                var camera = new BABYLON.ArcRotateCamera('arccamera', 
+                                                        BABYLON.Tools.ToRadians(0), 
+                                                        BABYLON.Tools.ToRadians(0),
+                                                        5.0,
+                                                        BABYLON.Vector3.Zero(),
+                                                        scene);
+
+                camera.attachControl(canvas, true);
+
+                var pointLight = new BABYLON.PointLight("pointlight", new BABYLON.Vector3(0, 0, 0), scene);
+                pointLight.parent = camera;
+                pointLight.intensity = 10;
+
+                BABYLON.SceneLoader.ImportMesh("", "", "models/alien.babylon", 
+                scene, 
+                function(newMeshes) {
+                    // newMeshes.forEach(function(mesh) {
+                    //    mesh.rotation = new BABYLON.Vector3(
+                    //        BABYLON.Tools.ToRadians(45),
+                    //        0,
+                    //        0);}
+                    //    ) 
+                    });
+
+                return scene;
+            };
+            
+            var scene = createScene();
+
+            engine.runRenderLoop(function() {
+                scene.render();
+            });
+
+        });
+    </script>
+</body>
+</html>
